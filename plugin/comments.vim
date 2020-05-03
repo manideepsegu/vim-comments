@@ -2,15 +2,16 @@ if exists("g:vim_comments")
   finish
 endif
 let g:vim_comments = 1
+let s:escape_chars = '\\/.*$^~[]&'
 function! s:MarkTodo(str) abort
-  let line = escape(getline('.'), '\\/.*$^~[]&')
+  let line = escape(getline('.'), s:escape_chars)
   if line !~ '^\s*$'
-    call setline('.', substitute(line, '^.*$', escape(substitute(&commentstring, '%s', a:str . line . ' ', ''), '\\/.*$^~[]&'), ''))
+    call setline('.', substitute(line, '^.*$', escape(substitute(&commentstring, '%s', a:str . line . ' ', ''), s:escape_chars), ''))
   endif
 endfunction
 function! s:UnMarkTodo(str) abort
   let line = getline('.')
-  let submatches = matchlist(line, substitute("^" . escape(&commentstring, '\\/.*$^~[]&') . "$", '%s', a:str . '\\(.*\\) ', ''))
+  let submatches = matchlist(line, substitute("^" . escape(&commentstring, s:escape_chars) . "$", '%s', a:str . '\\(.*\\) ', ''))
   if !empty(submatches)
     call setline('.', submatches[1])
   endif
