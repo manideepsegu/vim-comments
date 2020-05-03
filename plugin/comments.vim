@@ -11,18 +11,18 @@ function! s:MarkTodo(str) abort
 endfunction
 function! s:UnMarkTodo(str) abort
   let line = getline('.')
-  let submatches = matchlist(line, substitute("^" . escape(&commentstring, s:escape_chars) . "$", '%s', a:str . '\\(.*\\) ', ''))
+  let submatches = matchlist(line, substitute("^" . escape(&commentstring, s:escape_chars) . "$", '%s', a:str . '\\(.*\\)\\s*', ''))
   if !empty(submatches)
     call setline('.', submatches[1])
   endif
 endfunction
 
 xnoremap <silent> ,m :call <sid>MarkTodo(' ')<CR>
-xnoremap <silent> ,n :call <sid>UnMarkTodo(' ')<CR>
+xnoremap <silent> ,n :call <sid>UnMarkTodo(' ')<CR> 
 nnoremap <silent> ,m :call <sid>MarkTodo(' ')<CR>
 nnoremap <silent> ,n :call <sid>UnMarkTodo(' ')<CR>
 
-xnoremap <silent> ,mm :call <sid>MarkTodo(' TODO REVIEW:MS ')<CR>
-xnoremap <silent> ,nn :call <sid>UnMarkTodo(' TODO REVIEW:MS ')<CR>
-nnoremap <silent> ,mm :call <sid>MarkTodo(' TODO REVIEW:MS ')<CR>
-nnoremap <silent> ,nn :call <sid>UnMarkTodo(' TODO REVIEW:MS ')<CR>
+xnoremap <silent> ,mm :call <sid>MarkTodo(printf(' TODO REVIEW:%0s ', toupper($USER)))<CR>
+xnoremap <silent> ,nn :call <sid>UnMarkTodo(printf(' TODO REVIEW:%0s ', toupper($USER)))<CR>
+nnoremap <silent> ,mm :call <sid>MarkTodo(printf(' TODO REVIEW:%0s ', toupper($USER)))<CR>
+nnoremap <silent> ,nn :call <sid>UnMarkTodo(printf(' TODO REVIEW:%0s ', toupper($USER)))<CR>
