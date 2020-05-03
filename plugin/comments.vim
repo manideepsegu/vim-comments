@@ -10,7 +10,7 @@ function! s:MarkTodo(str) abort
 endfunction
 function! s:UnMarkTodo(str) abort
   let line = getline('.')
-  let submatches = matchlist(line, substitute("^" . &commentstring . "$", '%s', a:str . '\\(.*\\) ', ''))
+  let submatches = matchlist(line, substitute("^" . escape(&commentstring, '\\/.*$^~[]&') . "$", '%s', a:str . '\\(.*\\) ', ''))
   if !empty(submatches)
     call setline('.', submatches[1])
   endif
